@@ -1,40 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Server.hpp                                         :+:      :+:    :+:   */
+/*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lucocozz <lucocozz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 15:43:25 by lucocozz          #+#    #+#             */
-/*   Updated: 2022/12/01 00:58:54 by lucocozz         ###   ########.fr       */
+/*   Updated: 2022/12/01 00:57:12 by lucocozz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#pragma once
+#include "Server.hpp"
 
-#include "EpollSocket.hpp"
-#include "Config.hpp"
+Server::Server(void) {}
 
-class Server
+Server::Server(EpollSocket &socket, ServerContext &context) : socket(socket), context(context) {}
+
+Server::Server(const Server &rhs)
 {
-public:
-	EpollSocket					socket;
-	ServerContext				context;
-
-	Server(void);
-	Server(EpollSocket &socket, ServerContext &context);
-	Server(const Server &rhs);
-	~Server(void);
-
-	Server	&operator=(const Server &rhs);
-};
-
-inline bool	operator==(const Server &lhs, const Server &rhs)
-{
-	return (lhs.socket == rhs.socket && lhs.context == rhs.context);
+	*this = rhs;
 }
 
-inline bool	operator!=(const Server &lhs, const Server &rhs)
+Server::~Server(void) {}
+
+Server	&Server::operator=(const Server &rhs)
 {
-	return (!(lhs == rhs));
+	if (this != &rhs)
+	{
+		this->socket = rhs.socket;
+		this->context = rhs.context;
+	}
+	return (*this);
 }

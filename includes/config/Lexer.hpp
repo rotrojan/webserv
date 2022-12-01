@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Lexer.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lucocozz <lucocozz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 01:06:41 by lucocozz          #+#    #+#             */
-/*   Updated: 2022/04/23 14:52:05 by user42           ###   ########.fr       */
+/*   Updated: 2022/12/01 02:21:37 by lucocozz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,96 +36,27 @@ public:
 
 	Token(TokenType type, const std::string &literal, uint line)
 		: type(type), literal(literal), line(line) {}
-	
+
 	~Token() {}
 };
 
 class Lexer
 {
 protected:
-	std::vector<Token>			_tokens;
+	std::vector<Token>	_tokens;
 
 public:
+	Lexer(void);
+	Lexer(const Lexer &src);
+	~Lexer();
 
-	Lexer(void) {}
+	Lexer &operator=(const Lexer &rhs);
 
-	Lexer(const Lexer &src)
-	{
-		*this = src;
-	}
-
-	~Lexer() {}
-
-	Lexer &operator=(const Lexer &rhs)
-	{
-		if (this != &rhs)
-			this->_tokens = rhs._tokens;
-		return (*this);
-	}
-
-	void lex(std::ifstream &file)
-	{
-		std::string	line;
-
-		if (file.is_open() == false)
-			throw (std::runtime_error("File not open"));
-		for (uint lineNumber = 1; file.eof() == false; ++lineNumber)
-		{
-			std::getline(file, line);
-			this->_tokenize(line, lineNumber);
-		}
-	}
+	void lex(std::ifstream &file);
 
 private:
-	void	_tokenize(const std::string &line, const uint &lineNumber)
-	{
-		std::string	literal;
-		uint		column = 0;
-		
-		while (column < line.size())
-		{
-			if (line[column] == '#')
-				break;
-			else if (line[column] == '{')
-				this->_addToken(Token(BlockStart, "{", lineNumber), column);
-			else if (line[column] == '}')
-				this->_addToken(Token(BlockEnd, "}", lineNumber), column);
-			else if (line[column] == ';')
-				this->_addToken(Token(Semicolon, ";", lineNumber), column);
-			else if (this->_isKeyword(line[column]) == true)
-			{
-				literal = this->_getKeyword(line, column);
-				this->_tokens.push_back(Token(Keyword, literal, lineNumber));
-			}
-			else
-				++column;
-		}
-	}
-
-	void	_addToken(const Token &token, uint &column)
-	{
-		this->_tokens.push_back(token);
-		++column;
-	}
-
-	std::string	_getKeyword(const std::string &line, uint &column)
-	{
-		std::string	keyword;
-
-		while (column < line.size() && this->_isKeyword(line[column]) == true)
-		{
-			keyword += line[column];
-			++column;
-		}
-		return (keyword);
-	}
-
-	bool	_isKeyword(const char &c)
-	{
-		std::string	charset = "_./$-*:";
-
-		if (std::isalnum(c) > 0 || charset.find(c) != std::string::npos)
-			return (true);
-		return (false);
-	}
+	void		__tokenize(const std::string &line, const uint &lineNumber);
+	void		__addToken(const Token &token, uint &column);
+	std::string	__getKeyword(const std::string &line, uint &column);
+	bool		__isKeyword(const char &c);
 };
