@@ -6,7 +6,7 @@
 /*   By: lucocozz <lucocozz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/21 19:48:40 by lucocozz          #+#    #+#             */
-/*   Updated: 2022/04/27 18:06:11 by lucocozz         ###   ########.fr       */
+/*   Updated: 2022/12/04 14:30:35 by lucocozz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 #include <syslog.h>
 #include "Config.hpp"
 #include "EpollSocket.hpp"
-#include "Server.hpp"
-#include "serverCore.hpp"
+#include "HttpServer.hpp"
+#include "server.hpp"
 
 #ifndef CONFIG_FILE_NAME
 # define CONFIG_FILE_NAME "webserv.conf"
@@ -26,12 +26,12 @@ int	main(void)
 {
 	try {
 		Config				config;
-		std::vector<Server>	serverList;
+		std::vector<HttpServer>	serverList;
 
 		config.parse(std::string(WEBSERV_PATH) + CONFIG_FILE_NAME);
 		try {
 			serverList = createServers(config);
-			serverCore(serverList);
+			server(serverList);
 		}
 		catch (const std::exception &e) {
 			std::cerr << "Error: " << e.what() << std::endl;

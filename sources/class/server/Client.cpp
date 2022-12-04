@@ -6,7 +6,7 @@
 /*   By: lucocozz <lucocozz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/09 14:37:30 by lucocozz          #+#    #+#             */
-/*   Updated: 2022/12/01 01:07:35 by lucocozz         ###   ########.fr       */
+/*   Updated: 2022/12/04 14:04:40 by lucocozz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 Client::Client(void): linkedServer(NULL) {}
 
-Client::Client(EpollSocket &socket, std::vector<Server*> serverLinks):
+Client::Client(EpollSocket &socket, std::vector<HttpServer*> serverLinks):
 	_serverLinks(serverLinks), socket(socket), linkedServer(NULL) {}
 
 Client::~Client() {}
@@ -26,8 +26,7 @@ Client::Client(const Client &rhs)
 
 Client	&Client::operator=(const Client &rhs)
 {
-	if (this != &rhs)
-	{
+	if (this != &rhs) {
 		this->linkedServer = rhs.linkedServer;
 		this->socket = rhs.socket;
 		this->_serverLinks = rhs._serverLinks;
@@ -35,12 +34,13 @@ Client	&Client::operator=(const Client &rhs)
 	return (*this);
 }
 
-const std::vector<Server*>	&Client::getServerLinks() const {
+const std::vector<HttpServer*>	&Client::getServerLinks() const
+{
 	return (this->_serverLinks);
 }
 
 
-//! wtf is that shit ??
+//! wtf is this shit ??
 void	Client::fetchServerlink(std::string &data)
 {
 	if (this->_serverLinks.size() == 1) {

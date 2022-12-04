@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   serverCore.cpp                                     :+:      :+:    :+:   */
+/*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lucocozz <lucocozz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 15:14:35 by lucocozz          #+#    #+#             */
-/*   Updated: 2022/04/27 18:36:33 by lucocozz         ###   ########.fr       */
+/*   Updated: 2022/12/04 14:30:35 by lucocozz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 #include "Socket.hpp"
 #include "EpollSocket.hpp"
 #include "Config.hpp"
-#include "serverCore.hpp"
+#include "server.hpp"
 #include "system.hpp"
 #include "Client.hpp"
 
 bool	g_running = true;
 
-static void	initServer(std::vector<Server> &serverList, Epoll &epoll)
+static void	initServer(std::vector<HttpServer> &serverList, Epoll &epoll)
 {
 	EpollSocket			socket;
 	std::vector<int>	controledSocket;
@@ -44,7 +44,7 @@ static void	closeClient(std::map<int, Client> &clientList)
 			it->second.socket.closeSocket();
 }
 
-void	serverCore(std::vector<Server> &serverList)
+void	server(std::vector<HttpServer> &serverList)
 {
 	Epoll					epoll(20);
 	std::map<int, Client>	clientList;

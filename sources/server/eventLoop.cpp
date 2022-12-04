@@ -6,19 +6,19 @@
 /*   By: lucocozz <lucocozz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/09 16:50:53 by lucocozz          #+#    #+#             */
-/*   Updated: 2022/04/26 16:50:45 by lucocozz         ###   ########.fr       */
+/*   Updated: 2022/12/04 14:30:35 by lucocozz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <vector>
 #include <iostream>
 #include "EpollSocket.hpp"
-#include "Server.hpp"
+#include "HttpServer.hpp"
 #include "Client.hpp"
 #include "Epoll.hpp"
-#include "serverCore.hpp"
+#include "server.hpp"
 
-static bool	isAServer(std::vector<Server> &serverList, EpollSocket &socketEvent)
+static bool	isAServer(std::vector<HttpServer> &serverList, EpollSocket &socketEvent)
 {
 	for (size_t i = 0; i < serverList.size(); ++i)
 	{
@@ -29,7 +29,7 @@ static bool	isAServer(std::vector<Server> &serverList, EpollSocket &socketEvent)
 }
 
 
-void	eventLoop(std::vector<Server> &serverList,
+void	eventLoop(std::vector<HttpServer> &serverList,
 	std::map<int, Client> &clientList, Epoll &epoll, int events)
 {
 	EpollSocket	socketEvent;

@@ -6,7 +6,7 @@
 /*   By: lucocozz <lucocozz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 19:58:50 by lucocozz          #+#    #+#             */
-/*   Updated: 2022/04/09 21:07:36 by lucocozz         ###   ########.fr       */
+/*   Updated: 2022/12/04 14:52:24 by lucocozz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,9 @@
 #include <iostream>
 #include "EpollSocket.hpp"
 #include "Config.hpp"
-#include "Server.hpp"
+#include "HttpServer.hpp"
+
+using namespace config;
 
 static EpollSocket	createSocket(std::string port)
 {
@@ -28,7 +30,7 @@ static EpollSocket	createSocket(std::string port)
 	return (server);
 }
 
-static int	checkServers(std::vector<Server> &servers, ServerContext &context)
+static int	checkServers(std::vector<HttpServer> &servers, ServerContext &context)
 {
 	for (size_t i = 0; i < servers.size(); ++i)
 	{
@@ -49,11 +51,11 @@ static void	announce(ServerContext &context)
 
 	listen = context.directives.at("listen");
 	serverName = context.directives.at("server_name")[0];
-	std::cout << "Server " << serverName << " created" << std::endl;
+	std::cout << "HttpServer " << serverName << " created" << std::endl;
 	std::cout << "listening on " << listen[0] << ":" << listen[1] << std::endl;
 }
 
-static EpollSocket	findSocket(std::vector<Server> &servers, ServerContext &context)
+static EpollSocket	findSocket(std::vector<HttpServer> &servers, ServerContext &context)
 {
 	for (size_t i = 0; i < servers.size(); ++i)
 	{
@@ -63,25 +65,25 @@ static EpollSocket	findSocket(std::vector<Server> &servers, ServerContext &conte
 	return (EpollSocket());
 }
 
-static void	addServer(std::vector<Server> &servers, ServerContext &context)
+static void	addServer(std::vector<HttpServer> &servers, ServerContext &context)
 {
 	int			check;
 	EpollSocket	socket;
 
 	check = checkServers(servers, context);
 	if (check == -1)
-		throw std::runtime_error("Server already exists");
+		throw std::runtime_error("HttpServer already exists");
 	else if (check == 0)
 		socket = findSocket(servers, context);
 	else
 		socket = createSocket(context.directives.at("listen")[1]);
-	servers.push_back(Server(socket, context));
+	servers.push_back(HttpServer(socket, context));
 	announce(context);
 }
 
-std::vector<Server>	createServers(Config &config)
+std::vector<HttpServer>	createServers(Config &config)
 {
-	std::vector<Server>	serverList;
+	std::vector<HttpServer>	serverList;
 
 	for (size_t i = 0; i < config.servers.size(); ++i)
 	{

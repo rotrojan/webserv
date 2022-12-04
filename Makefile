@@ -6,7 +6,7 @@
 #    By: lucocozz <lucocozz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/21 19:56:36 by lucocozz          #+#    #+#              #
-#    Updated: 2022/12/01 02:33:54 by lucocozz         ###   ########.fr        #
+#    Updated: 2022/12/04 14:42:28 by lucocozz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ DEF := CONFIG_FILE_NAME WEBSERV_PATH DEFAULT_PORT DEFAULT_ROOT
 DEFINES = $(addprefix -D ,$(foreach tmp,$(DEF),$(tmp)='$($(tmp))'))
 
 SRC := 	main.cpp					\
-		serverCore.cpp				\
+		server.cpp					\
 		handleInput.cpp				\
 		handleOutput.cpp			\
 		handleConnection.cpp		\
@@ -31,20 +31,13 @@ SRC := 	main.cpp					\
 		createServers.cpp			\
 		closeServers.cpp			\
 		eventLoop.cpp				\
-		statusCode.cpp				\
-		configData.cpp				\
-		fileRelated.cpp				\
-		locationRelated.cpp			\
-		pathRelated.cpp				\
-		stringRelated.cpp			\
-		URLRelated.cpp				\
 		Socket.cpp					\
 		EpollSocket.cpp				\
 		Epoll.cpp					\
-		Server.cpp					\
+		HttpServer.cpp				\
 		Client.cpp					\
-		Parser.cpp					\
-		Lexer.cpp					\
+		Parser.config.cpp			\
+		Lexer.config.cpp			\
 		Config.cpp
 
 MAKE = make
