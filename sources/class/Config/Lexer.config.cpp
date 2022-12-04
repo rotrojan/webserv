@@ -6,7 +6,7 @@
 /*   By: lucocozz <lucocozz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 01:06:41 by lucocozz          #+#    #+#             */
-/*   Updated: 2022/12/04 14:44:41 by lucocozz         ###   ########.fr       */
+/*   Updated: 2022/12/04 19:54:50 by lucocozz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,11 @@ namespace config
 			std::getline(file, line);
 			this->__tokenize(line, lineNumber);
 		}
+	}
+
+	std::vector<Token>	&Lexer::getTokens(void)
+	{
+		return (this->_tokens);
 	}
 
 	void	Lexer::__tokenize(const std::string &line, const uint &lineNumber)

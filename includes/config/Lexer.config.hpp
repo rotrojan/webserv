@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Lexer.hpp                                          :+:      :+:    :+:   */
+/*   Lexer.config.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lucocozz <lucocozz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 01:06:41 by lucocozz          #+#    #+#             */
-/*   Updated: 2022/12/04 14:38:44 by lucocozz         ###   ########.fr       */
+/*   Updated: 2022/12/04 19:43:02 by lucocozz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ namespace config
 	
 		void lex(std::ifstream &file);
 	
+		std::vector<Token>	&getTokens(void);
+
 	private:
 		void		__tokenize(const std::string &line, const uint &lineNumber);
 		void		__addToken(const Token &token, uint &column);

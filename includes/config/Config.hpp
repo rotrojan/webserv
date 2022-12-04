@@ -6,7 +6,7 @@
 /*   By: lucocozz <lucocozz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 01:11:36 by lucocozz          #+#    #+#             */
-/*   Updated: 2022/12/04 14:49:59 by lucocozz         ###   ########.fr       */
+/*   Updated: 2022/12/04 19:39:37 by lucocozz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,14 @@ namespace config
 		return (lhs.directives == rhs.directives && lhs.locations == rhs.locations);
 	}
 
-	class Config: public Lexer, public Parser
+
+
+
+	class Config
 	{
 	private:
+		Lexer		_lexer;
+		Parser		_parser;
 		std::string	_filePath;
 
 	public:

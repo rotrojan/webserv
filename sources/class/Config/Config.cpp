@@ -6,16 +6,17 @@
 /*   By: lucocozz <lucocozz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 01:11:36 by lucocozz          #+#    #+#             */
-/*   Updated: 2022/12/04 14:53:35 by lucocozz         ###   ########.fr       */
+/*   Updated: 2022/12/04 20:04:25 by lucocozz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Config.hpp"
 
-namespace config {
-	Config::Config(void): Lexer(), Parser() {}
+namespace config
+{
+	Config::Config(void) {}
 
-	Config::Config(const Config &src): Lexer(), Parser()
+	Config::Config(const Config &src)
 	{
 		*this = src;
 	}
@@ -24,10 +25,9 @@ namespace config {
 
 	Config	&Config::operator=(const Config &rhs)
 	{
-		if (this != &rhs)
-		{
-			this->Lexer::operator=(rhs);
-			this->Parser::operator=(rhs);
+		if (this != &rhs) {
+			this->_lexer = rhs._lexer;
+			this->_parser = rhs._parser;
 			this->_filePath = rhs._filePath;
 		}
 		return (*this);
@@ -41,9 +41,9 @@ namespace config {
 		fileStream.open(filePath.c_str());
 		if (fileStream.is_open() == false)
 			throw (std::runtime_error("Can't open file: " + filePath));
-		this->Lexer::lex(fileStream);
+		this->_lexer.lex(fileStream);
 		fileStream.close();
-		this->Parser::parse(this->_tokens);
+		this->_parser.parse(this->_lexer.getTokens());
 		this->__parsingToData();
 		this->__checkConfig();
 	}
@@ -58,8 +58,7 @@ namespace config {
 
 	void	Config::__checkDefaultRoot(void)
 	{
-		for (size_t i = 0; i < this->servers.size(); ++i)
-		{
+		for (size_t i = 0; i < this->servers.size(); ++i) {
 			if (this->servers[i].directives.find("root") == this->servers[i].directives.end())
 				this->servers[i].directives["root"].push_back(DEFAULT_ROOT);
 		}
@@ -70,8 +69,7 @@ namespace config {
 		std::pair<std::vector<std::string>, std::vector<std::string> >					directives;
 		std::vector<std::pair<std::vector<std::string>, std::vector<std::string> > >	ports;
 
-		for (size_t i = 0; i < this->servers.size(); ++i)
-		{
+		for (size_t i = 0; i < this->servers.size(); ++i) {
 			this->servers[i].directives["listen"] = this->__resolveListen(this->servers[i].directives["listen"]);
 			directives.first = this->servers[i].directives["listen"];
 			directives.second = this->servers[i].directives["server_name"];
@@ -87,18 +85,15 @@ namespace config {
 
 		if (listen.size() > 2)
 			throw (std::runtime_error("Invalid listen directive"));
-		if (listen.size() == 0)
-		{
+		if (listen.size() == 0) {
 			resolve.push_back("0.0.0.0");
 			resolve.push_back(DEFAULT_PORT);
 		}
-		else if (listen[0].find(".") != std::string::npos)
-		{
+		else if (listen[0].find(".") != std::string::npos) {
 			resolve.push_back(listen[0]);
 			resolve.push_back(DEFAULT_PORT);
 		}
-		else
-		{
+		else {
 			resolve.push_back("0.0.0.0");
 			resolve.push_back(listen[0]);
 		}
@@ -107,16 +102,17 @@ namespace config {
 
 	void	Config::__parsingToData(void)
 	{
-		for (size_t i = 0; i < this->_parsed.size(); ++i)
-			this->servers.push_back(this->__parsedServerToData(this->_parsed[i].block));
+		size_t	size = this->_parser.size();
+
+		for (size_t i = 0; i < size; ++i)
+			this->servers.push_back(this->__parsedServerToData(this->_parser.getData(i).block));
 	}
 
 	ServerContext	Config::__parsedServerToData(const std::vector<Directive> &block)
 	{
 		ServerContext			server;
 
-		for (size_t i = 0; i < block.size(); ++i)
-		{
+		for (size_t i = 0; i < block.size(); ++i) {
 			if (block[i].literal == "location")
 				server.locations.push_back(this->__parsedLocationToData(block[i]));
 			else

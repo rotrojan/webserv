@@ -6,7 +6,7 @@
 /*   By: lucocozz <lucocozz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 15:14:35 by lucocozz          #+#    #+#             */
-/*   Updated: 2022/12/04 14:30:35 by lucocozz         ###   ########.fr       */
+/*   Updated: 2022/12/04 15:19:42 by lucocozz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,7 @@ void	server(std::vector<HttpServer> &serverList)
 		while (g_running == true)
 			eventLoop(serverList, clientList, epoll, epoll.wait());
 	}
-	catch (std::exception &e)
-	{
+	catch (std::exception &e) {
 		if (errno == EINTR)
 			closeClient(clientList);
 		else

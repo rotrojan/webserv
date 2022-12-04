@@ -6,7 +6,7 @@
 /*   By: lucocozz <lucocozz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 01:09:40 by lucocozz          #+#    #+#             */
-/*   Updated: 2022/12/04 14:49:56 by lucocozz         ###   ########.fr       */
+/*   Updated: 2022/12/04 20:03:37 by lucocozz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ namespace config
 		std::set<std::string>	_directivesLocation;
 	
 	protected:
-		std::vector<Directive>		_parsed;
+		std::vector<Directive>		_data;
 	
 	public:
 		Parser(void);
@@ -51,6 +51,11 @@ namespace config
 		Parser &operator=(const Parser &rhs);
 	
 		void	parse(std::vector<Token> &tokens);
+
+		size_t	size(void);
+
+		std::vector<Directive>	&getData(void);
+		Directive				&getData(uint i);
 	
 	private:
 		void	__checkParsing(void);

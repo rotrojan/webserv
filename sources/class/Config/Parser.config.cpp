@@ -6,7 +6,7 @@
 /*   By: lucocozz <lucocozz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 01:09:40 by lucocozz          #+#    #+#             */
-/*   Updated: 2022/12/04 14:53:25 by lucocozz         ###   ########.fr       */
+/*   Updated: 2022/12/04 20:12:19 by lucocozz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,10 @@ namespace config
 
 	Parser &Parser::operator=(const Parser &rhs)
 	{
-		if (this != &rhs)
-		{
+		if (this != &rhs) {
 			this->_directivesServer = rhs._directivesServer;
 			this->_directivesLocation = rhs._directivesLocation;
-			this->_parsed = rhs._parsed;
+			this->_data = rhs._data;
 		}
 		return (*this);
 	}
@@ -43,19 +42,34 @@ namespace config
 		size_t	i = 0;
 
 		this->__checkBrackets(tokens);
-		this->_parsed = this->__parseDirective(tokens, i);
+		this->_data = this->__parseDirective(tokens, i);
 		this->__checkParsing();
+	}
+
+	size_t	Parser::size(void)
+	{
+		return (this->_data.size());
+	}
+
+	std::vector<Directive>	&Parser::getData(void)
+	{
+		return (this->_data);
+	}
+
+	Directive	&Parser::getData(uint i)
+	{
+		return (this->_data[i]);
 	}
 
 	void	Parser::__checkParsing(void)
 	{
-		for (size_t i = 0; i < this->_parsed.size(); ++i)
+		for (size_t i = 0; i < this->_data.size(); ++i)
 		{
-			if (this->_parsed[i].literal == "server")
-				this->__checkServerBlock(this->_parsed[i].block);
+			if (this->_data[i].literal == "server")
+				this->__checkServerBlock(this->_data[i].block);
 			else
-				throw (std::runtime_error(this->__errorMsg(this->_parsed[i].line,
-					"Unknow directive: " + this->_parsed[i].literal)));
+				throw (std::runtime_error(this->__errorMsg(this->_data[i].line,
+					"Unknow directive: " + this->_data[i].literal)));
 		}
 	}
 
@@ -133,7 +147,7 @@ namespace config
 		path += ("directives/" + file);
 		directivesFile.open(path.c_str());
 		if (directivesFile.is_open() == false)
-			throw (std::runtime_error("Can't open file: " + path));
+			throw (std::runtime_error("Can't open directives file: " + path));
 		while (directivesFile.eof() == false)
 		{
 			std::getline(directivesFile, line);
