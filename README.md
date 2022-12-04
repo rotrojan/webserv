@@ -30,7 +30,8 @@ nginx doc:
 nginx lexer/parser:
 	https://github.com/tufanbarisyildirim/gonginx	|
 	https://github.com/caddyserver/nginx-adapter	|
-	https://github.com/nginxinc/crossplane
+	https://github.com/nginxinc/crossplane		|
+	https://www.nginx.com/wp-content/uploads/2018/12/NGINX-Conf-2018-slides_Hulegaard-config-analysis.pdf
 
 epoll man:
 	https://manpages.ubuntu.com/manpages/bionic/fr/man7/epoll.7.html
